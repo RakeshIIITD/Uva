@@ -5,14 +5,23 @@ using namespace std ;
 vector<vector<int> > adj(12);
 
  int _max =-99999 ;
+vector<int> max_path ;
 
-void dfs(int u,int res,int _count, int visited[])
+void dfs(int u,int res,int _count, int visited[], vector<int>& path)
 {
-    visited[u] = 1 ;
-    if(res>_max)
+    
+    
+    if(res>=_max&&_count==5)
     {
       _max = res ;
-      cout<<_max<<endl;
+      max_path = path ;
+
+        cout<<"Max Value : "<<_max<<"\nMax Path : " ;
+
+        for(int i=0;i<max_path.size();i++)  cout<<max_path[i]<<" ";
+          cout<<endl;
+
+        return ;
     }
     if(_count==5)   return ;
 
@@ -22,9 +31,14 @@ void dfs(int u,int res,int _count, int visited[])
 
       if(visited[v]==0)
       {
-          dfs(v,res+val[v],_count+1,visited) ;
+          path.push_back(v) ;
+          visited[u] = 1 ;
+          dfs(v,res+val[v],_count+1,visited,path) ;
+          path.pop_back() ;
+          visited[u] = 0 ;
       }
   }
+  //path.pop_back() ;
 }
 
 
@@ -47,13 +61,18 @@ int main()
       adj[b].push_back(a) ;
   }
 
-  for(int u = 0;u<12; u++)
+  for(int u = 0 ;u<12; u++)
   {
+    vector<int> path ;
+    path.push_back(u) ;
      int visited[12] = {0} ;
-     dfs(u,val[u],1,visited) ;
+     dfs(u,val[u],1,visited,path) ;
   }
 
-  cout<<"Max Value : "<<_max<<endl ;
+  //cout<<"Max Value : "<<_max<<endl<<"Max Path : \n" ;
+
+  //for(int i=0;i<max_path.size();i++)  cout<<max_path[i]<<" ";
+
 
   return 0 ;
 }
